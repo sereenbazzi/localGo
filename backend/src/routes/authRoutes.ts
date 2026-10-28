@@ -5,7 +5,7 @@ import {
   authenticateToken,
   AuthenticatedRequest
 } from "../middleware/authMiddleware";
-
+import { authorizeRoles } from "../middleware/roleMiddleware";
 const router = Router();
 
 // Public routes
@@ -20,6 +20,16 @@ router.get(
     res.status(200).json({
       message: "Authenticated successfully",
       user: req.user
+    });
+  }
+);
+router.get(
+  "/dmc-only",
+  authenticateToken,
+  authorizeRoles("DMC"),
+  (req, res) => {
+    res.status(200).json({
+      message: "Welcome! You have DMC access.",
     });
   }
 );
